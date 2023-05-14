@@ -1,0 +1,35 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  h1, h2, h3 {
+    margin: 0;
+  }
+  
+  .cupones {
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    margin: 20px 0;
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  
+  li h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+  }
+  
+
+  

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Iniciar Sesión</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #daa8a8;
+		}
+
+		form {
+			background-color: #fff;
+			padding: 20px;
+			max-width: 500px;
+			margin: 20px auto;
+			border-radius: 5px;
+			box-shadow: 0 0 10px rgba(0,0,0,0.2);
+		}
+
+		label {
+			display: block;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}
+
+		input[type="text"], input[type="password"] {
+			display: block;
+			width: 100%;
+			padding: 10px;
+			margin-bottom: 15px;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+			box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+			font-size: 16px;
+			box-sizing: border-box;
+		}
+
+		input[type="submit"] {
+			background-color: #4CAF50;
+			color: #fff;
+			padding: 10px 20px;
+			border-radius: 5px;
+			border: none;
+			font-size: 18px;
+			cursor: pointer;
+		}
+
+		input[type="submit"]:hover {
+			background-color: #3e8e41;
+		}
+	</style>
+</head>
+<body>
+	<form>
+		<label>Tipo de Usuario:</label>
+		<select id="tipo_usuario" name="tipo_usuario">
+			<option value="admin">Administrador</option>
+			<option value="empresa">Empresa Ofertante</option>
+			<option value="cliente">Cliente</option>
+		</select>
+		
+		<label>Nombre de Usuario:</label>
+		<input type="text" name="nombre_usuario" required>
+		
+		<label>Contraseña:</label>
+		<input type="password" name="contraseña" required>
+		
+		<input type="submit" value="Iniciar Sesión">
+	</form>
+	
+	<script>
+		// Función para validar el formulario de inicio de sesión
+		function validarFormulario() {
+			var tipoUsuario = document.getElementById("tipo_usuario").value;
+			var nombreUsuario = document.getElementsByName("nombre_usuario")[0].value;
+			var contraseña = document.getElementsByName("contraseña")[0].value;
+			
+			// Validar que los campos no estén vacíos
+			if (nombreUsuario == "" || contraseña == "") {
+				alert("Por favor, ingrese su nombre de usuario y contraseña.");
+				return false;
+			}
+			
+			// Validar que el tipo de usuario seleccionado tenga los campos adecuados
+			switch(tipoUsuario) {
+				case "admin":
+					if (nombreUsuario != "admin" || contraseña != "admin123") {
+						alert("Nombre de usuario o contraseña incorrectos.");
+						return false;
+					}
+					break;
+				case "empresa":
+					if (nombreUsuario != "ofertante" || contraseña != "ofertante123") {
+						alert("Nombre de usuario o contraseña incorrectos.");
+						return false;
+					}
+					break;
+				case "cliente":
+			}
+		}

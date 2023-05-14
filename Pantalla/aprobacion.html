@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>La Cuponera SV</title>
+  </head>
+  <body>
+    <!-- Formulario de registro de empresa -->
+    <h2>Registro de empresa</h2>
+    <form action="#" method="post">
+      <label for="nombre">Nombre de empresa:</label>
+      <input type="text" id="nombre" name="nombre" required><br>
+
+      <label for="nit">NIT de empresa:</label>
+      <input type="text" id="nit" name="nit" required><br>
+
+      <label for="direccion">Dirección:</label>
+      <input type="text" id="direccion" name="direccion" required><br>
+
+      <label for="telefono">Teléfono:</label>
+      <input type="tel" id="telefono" name="telefono" required><br>
+
+      <label for="email">Correo electrónico:</label>
+      <input type="email" id="email" name="email" required><br>
+
+      <label for="usuario">Usuario:</label>
+      <input type="text" id="usuario" name="usuario" required><br>
+
+      <label for="contrasena">Contraseña:</label>
+      <input type="password" id="contrasena" name="contrasena" required><br>
+
+      <input type="submit" value="Enviar">
+    </form>
+
+    <!-- Formulario de publicación de oferta -->
+    <h2>Publicar oferta</h2>
+    <form action="#" method="post">
+      <label for="titulo">Título de la oferta:</label>
+      <input type="text" id="titulo" name="titulo" required><br>
+
+      <label for="precio_regular">Precio regular:</label>
+      <input type="number" id="precio_regular" name="precio_regular" required><br>
+
+      <label for="precio_oferta">Precio de oferta:</label>
+      <input type="number" id="precio_oferta" name="precio_oferta" required><br>
+
+      <label for="fecha_inicio">Fecha de inicio de oferta:</label>
+      <input type="date" id="fecha_inicio" name="fecha_inicio" required><br>
+
+      <label for="fecha_fin">Fecha de fin de la oferta:</label>
+      <input type="date" id="fecha_fin" name="fecha_fin" required><br>
+
+      <label for="fecha_limite">Fecha límite para canjear cupón:</label>
+      <input type="date" id="fecha_limite" name="fecha_limite" required><br>
+
+      <label for="cantidad">Cantidad de cupones:</label>
+      <input type="number" id="cantidad" name="cantidad"><br>
+
+      <label for="descripcion">Descripción de la oferta:</label>
+      <textarea id="descripcion" name="descripcion" required></textarea><br>
+
+      <label for="estado">Estado de la oferta:</label>
+      <select id="estado" name="estado">
+        <option value="disponible">Disponible</option>
+        <option value="no_disponible">No disponible</option>
+      </select><br>
+
+      <input type="submit" value="Enviar">
+    </form>
+
+    <!-- Ofertas disponibles

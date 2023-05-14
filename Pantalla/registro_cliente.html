@@ -1,0 +1,71 @@
+<style>
+    form {
+      margin: 0 auto;
+      width: 50%;
+      background-color: #f2f2f2;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    input[type="submit"]:hover {
+      background-color: #3e8e41;
+    }
+    
+    .error {
+      color: red;
+      font-style: italic;
+      margin-top: 5px;
+    }
+    </style>
+    
+    <form action="/registrar_cliente" method="post">
+      <label for="usuario">Usuario:</label>
+      <input type="text" id="usuario" name="usuario" required>
+    
+      <label for="correo">Correo electrónico:</label>
+      <input type="email" id="correo" name="correo" required>
+    
+      <label for="contraseña">Contraseña:</label>
+      <input type="password" id="contraseña" name="contraseña" required>
+    
+      <label for="nombre">Nombre completo:</label>
+      <input type="text" id="nombre" name="nombre" required>
+    
+      <label for="apellidos">Apellidos:</label>
+      <input type="text" id="apellidos" name="apellidos" required>
+    
+      <label for="dui">DUI:</label>
+      <input type="text" id="dui" name="dui" required>
+    
+      <label for="fecha_nacimiento">Fecha de nacimiento:</label>
+      <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required max="2004-05-12">
+    
+      <input type="submit" value="Registrar">
+    </form>
+    
