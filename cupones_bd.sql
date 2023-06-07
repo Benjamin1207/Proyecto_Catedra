@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 07-06-2023 a las 02:12:57
+-- Tiempo de generación: 07-06-2023 a las 03:11:41
 -- Versión del servidor: 8.0.31
 -- Versión de PHP: 8.0.26
 
@@ -97,9 +97,17 @@ CREATE TABLE IF NOT EXISTS `cupon` (
   `descripcion` varchar(480) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
   `id_estado` int NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `FK_id_estado` (`id_estado`) USING BTREE,
-  KEY `FK_empresa` (`id_empresa`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+  KEY `FK_id_estado` (`id_estado`) USING BTREE,
+  KEY `FK_empresa` (`id_empresa`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `cupon`
+--
+
+INSERT INTO `cupon` (`id`, `titulo`, `id_empresa`, `precio_regular`, `precio_oferta`, `fecha_inic`, `fecha_fin`, `fecha_canje`, `cantidad`, `descripcion`, `id_estado`) VALUES
+(1, 'Ejemplo de titulo', 1, 350, 200, '2023-06-10', '2023-07-31', '2023-08-07', 54, 'Ejemplo de descripcion', 1),
+(2, 'EJEMPLO DE TITULO 2', 1, 400, 200, '2023-06-10', '2023-06-22', '2023-09-23', 80, 'EJEMPLO DE DESCRIPCION DE OFERTA 2', 1);
 
 -- --------------------------------------------------------
 
@@ -143,6 +151,14 @@ CREATE TABLE IF NOT EXISTS `estado` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
+-- Volcado de datos para la tabla `estado`
+--
+
+INSERT INTO `estado` (`id`, `estado`) VALUES
+(1, 'Disponible'),
+(2, 'No Disponible');
+
+--
 -- Restricciones para tablas volcadas
 --
 
@@ -159,7 +175,7 @@ ALTER TABLE `compra`
 --
 ALTER TABLE `cupon`
   ADD CONSTRAINT `cupon_ibfk_1` FOREIGN KEY (`id_empresa`) REFERENCES `empresa` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `cupon_ibfk_2` FOREIGN KEY (`id_estado`) REFERENCES `estado` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `cupon_ibfk_2` FOREIGN KEY (`id_estado`) REFERENCES `estado` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
