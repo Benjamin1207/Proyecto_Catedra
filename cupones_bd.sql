@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 07-06-2023 a las 01:05:42
+-- Tiempo de generación: 07-06-2023 a las 02:12:57
 -- Versión del servidor: 8.0.31
 -- Versión de PHP: 8.0.26
 
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `cupon` (
   `descripcion` varchar(480) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
   `id_estado` int NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `FK_id_estado` (`id_estado`),
+  UNIQUE KEY `FK_id_estado` (`id_estado`) USING BTREE,
   KEY `FK_empresa` (`id_empresa`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
@@ -114,14 +114,20 @@ CREATE TABLE IF NOT EXISTS `empresa` (
   `password` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
   `nombre_empresa` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
   `direccion` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
-  `NIT` int NOT NULL,
+  `NIT` bigint NOT NULL,
   `NRC` int NOT NULL,
   `telefono` int NOT NULL,
   `email` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
-  `id_estado` int NOT NULL,
   `porcentaje_comis` float NOT NULL COMMENT 'campo de comision solo utilizada por admin',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `empresa`
+--
+
+INSERT INTO `empresa` (`id`, `user`, `password`, `nombre_empresa`, `direccion`, `NIT`, `NRC`, `telefono`, `email`, `porcentaje_comis`) VALUES
+(1, 'udb_virtual', 'udb123456', 'UDB EL SALVADOR', 'CIUDADELA DON BOSCO, SOYAPANGO', 12345678912345, 12125566, 55665522, 'udbvirtual@gmail.com', 0.02);
 
 -- --------------------------------------------------------
 
@@ -134,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `estado` (
   `id` int NOT NULL AUTO_INCREMENT,
   `estado` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Restricciones para tablas volcadas
@@ -152,13 +158,8 @@ ALTER TABLE `compra`
 -- Filtros para la tabla `cupon`
 --
 ALTER TABLE `cupon`
-  ADD CONSTRAINT `cupon_ibfk_1` FOREIGN KEY (`id_empresa`) REFERENCES `empresa` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `estado`
---
-ALTER TABLE `estado`
-  ADD CONSTRAINT `estado_ibfk_1` FOREIGN KEY (`id`) REFERENCES `cupon` (`id_estado`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `cupon_ibfk_1` FOREIGN KEY (`id_empresa`) REFERENCES `empresa` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `cupon_ibfk_2` FOREIGN KEY (`id_estado`) REFERENCES `estado` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
