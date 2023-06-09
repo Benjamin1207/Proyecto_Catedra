@@ -19,11 +19,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             WHEN EXISTS(SELECT * FROM cliente WHERE user = :nombre_usuario_cliente AND password = :password_cliente) THEN 'cliente'
             WHEN EXISTS(SELECT * FROM empresa WHERE user = :nombre_usuario_empresa AND password = :password_empresa) THEN 'empresa'
             ELSE NULL
-        END AS usuario");
+        END AS usuario,
+        CASE
+            WHEN EXISTS(SELECT id FROM cliente WHERE user = :nombre_usuario_cliente2 AND password = :password_cliente2) THEN (SELECT id FROM cliente WHERE user = :nombre_usuario_cliente3 AND password = :password_cliente3)
+            ELSE NULL
+        END AS id_cliente");
         $sql->bindParam(':nombre_usuario_admin', $user);
         $sql->bindParam(':password_admin', $password);
         $sql->bindParam(':nombre_usuario_cliente', $user);
         $sql->bindParam(':password_cliente', $password);
+        $sql->bindParam(':nombre_usuario_cliente2', $user);
+        $sql->bindParam(':password_cliente2', $password);
+        $sql->bindParam(':nombre_usuario_cliente3', $user);
+        $sql->bindParam(':password_cliente3', $password);
         $sql->bindParam(':nombre_usuario_empresa', $user);
         $sql->bindParam(':password_empresa', $password);
         $sql->execute();
@@ -33,6 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($resultado && $resultado['usuario']) {
             // Usuario autenticado correctamente
             $tabla = $resultado['usuario'];
+            $idCliente = $resultado['id_cliente'];
+            
             // Realizar las acciones correspondientes según la tabla en la que se encontró el usuario
 
             // Redireccionar según el tipo de usuario
@@ -47,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     session_start();
                     $_SESSION['tipo_usuario'] = $tabla;
                     $_SESSION['nombre_usuario'] = $user;
+                    $_SESSION['id_cliente'] = $idCliente;
                     
                     // Redireccionar según el tipo de usuario
                     if ($tabla === 'cliente') {
@@ -57,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         // Tipo de usuario desconocido
                         $error = "Tipo de usuario desconocido.";
                     }
+                    break;
                 case 'empresa':
                     header('Location: index_cliente.php?nombre_usuario=' . $user);
                     break;
@@ -143,3 +155,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </form>
 </body>
 </html>
+
