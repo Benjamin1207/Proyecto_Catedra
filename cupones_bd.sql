@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 07-06-2023 a las 03:11:41
+-- Tiempo de generación: 09-06-2023 a las 04:39:38
 -- Versión del servidor: 8.0.31
 -- Versión de PHP: 8.0.26
 
@@ -35,7 +35,14 @@ CREATE TABLE IF NOT EXISTS `admin` (
   `nombre_completo` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
   `email` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `admin`
+--
+
+INSERT INTO `admin` (`id`, `user`, `password`, `nombre_completo`, `email`) VALUES
+(1, 'admin1', 'admin123456', 'Administrador del sistema 1', 'admin.admin@admin.com');
 
 -- --------------------------------------------------------
 
@@ -54,7 +61,15 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   `direccion` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
   `email` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `cliente`
+--
+
+INSERT INTO `cliente` (`id`, `user`, `password`, `nombre_completo`, `fecha_nac`, `dui`, `direccion`, `email`) VALUES
+(1, 'cliente1', 'cliente123456', 'cliente de prueba', '1991-06-13', 48123336, 'san salvador, san salvador', 'cliente.cliente@cliente.com'),
+(2, 'gerardoramirez', 'rg110604', 'Ronald Gerardo Ramírez Guardado', '1993-03-17', 48125559, 'Res. JDLC, pol. K, #99M, Senda 4, San Salvador', 'gerardoudb@udb.com');
 
 -- --------------------------------------------------------
 
