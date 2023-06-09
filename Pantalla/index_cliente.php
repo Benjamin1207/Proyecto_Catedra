@@ -2,6 +2,7 @@
 require 'config/database.php';
 $db = new Database();
 $con = $db->conectar();
+
 // Verificar si el usuario está autenticado como cliente
 session_start();
 if (!isset($_SESSION['tipo_usuario']) || $_SESSION['tipo_usuario'] !== 'cliente') {
@@ -10,6 +11,7 @@ if (!isset($_SESSION['tipo_usuario']) || $_SESSION['tipo_usuario'] !== 'cliente'
 }
 
 $nombreUsuario = $_SESSION['nombre_usuario'];
+$idCliente = $_SESSION['id_cliente'];
 
 // Obtener datos del cliente
 $sqlCliente = $con->prepare("SELECT * FROM cliente WHERE user = :nombre_usuario");
@@ -18,7 +20,7 @@ $sqlCliente->execute();
 $cliente = $sqlCliente->fetch(PDO::FETCH_ASSOC);
 
 // Consulta para obtener los cupones
-$sqlCupones = $con->prepare("SELECT CUPON.TITULO, format(CUPON.PRECIO_OFERTA, 2) AS PRECIO_OFERTA_2, CUPON.FECHA_FIN, CUPON.DESCRIPCION, EMPRESA.NOMBRE_EMPRESA, format(CUPON.PRECIO_REGULAR, 2) AS PRECIO_REGULAR_2 FROM CUPON INNER JOIN EMPRESA ON CUPON.ID_EMPRESA=EMPRESA.ID");
+$sqlCupones = $con->prepare("SELECT CUPON.ID, CUPON.TITULO, format(CUPON.PRECIO_OFERTA, 2) AS PRECIO_OFERTA_2, CUPON.FECHA_FIN, CUPON.DESCRIPCION, EMPRESA.NOMBRE_EMPRESA, format(CUPON.PRECIO_REGULAR, 2) AS PRECIO_REGULAR_2 FROM CUPON INNER JOIN EMPRESA ON CUPON.ID_EMPRESA=EMPRESA.ID");
 $sqlCupones->execute();
 $resultado = $sqlCupones->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -69,6 +71,7 @@ $resultado = $sqlCupones->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
 </nav>
+<p></p>
 <main class="container">
     <div class="row">
         <?php foreach ($resultado as $row) { ?>
@@ -80,7 +83,7 @@ $resultado = $sqlCupones->fetchAll(PDO::FETCH_ASSOC);
                     <p>Precio regular: $<?php echo $row['PRECIO_REGULAR_2']; ?></p>
                     <b>Precio promoción: $<?php echo $row['PRECIO_OFERTA_2']; ?></b>
                     <p></p>  
-                    <a href="login.php"><button class="btn btn-primary" type="button">COMPRAR</button></a>
+                    <a href="pago.php?cupon_id=<?php echo $row['ID']; ?>"><button class="btn btn-primary" type="button">COMPRAR</button></a>
                 </div>
             </div>
         <?php } ?>
