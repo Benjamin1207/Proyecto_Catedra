@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idEmpresa = $cupon['id_empresa'];
     $cantidad = 1; // Solo se permite comprar un cupón a la vez
     $total = $cupon['precio_oferta'];
-    $fechaCompra = date('d-m-Y'); // Obtener la fecha actual en el formato deseado
+    $fechaCompra = date('Y-m-d'); // Obtener la fecha actual en el formato deseado (YYYY-MM-DD)
 
     $sqlGuardarCompra = $con->prepare("INSERT INTO compra (cod_compra, id_cupon, id_cliente, id_empresa, cantidad, total, fecha_compra) VALUES (:cod_compra, :id_cupon, :id_cliente, :id_empresa, :cantidad, :total, :fecha_compra)");
     $sqlGuardarCompra->bindParam(':cod_compra', $codCompra);
@@ -88,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sqlGuardarCompra->bindParam(':fecha_compra', $fechaCompra);
     $sqlGuardarCompra->execute();
 
+
     // Generar el PDF de la factura
     $pdf = new FPDF();
     $pdf->AddPage();
@@ -96,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pdf->Cell(0, 10, utf8_decode('Factura de Compra'), 0, 1, 'C');
     $pdf->Cell(0, 10, utf8_decode('Código de Compra: ') . $codCompra, 0, 1);
     $pdf->SetFont('Arial', '', 12);
-    $pdf->Cell(0, 10, utf8_decode('Fecha de Compra: ') . $fechaCompra, 0, 1);
+    $pdf->Cell(0, 10, utf8_decode('Fecha de Compra: ') . date('d-m-Y', strtotime($fechaCompra)), 0, 1);
     $pdf->SetFont('Arial', 'B', 16);
     $pdf->Cell(0, 10, utf8_decode('Datos del Cliente:'), 0, 1);
 
@@ -110,7 +111,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $pdf->SetFont('Arial', '', 12);
     $pdf->Cell(0, 10, utf8_decode('Título: ') . $cupon['titulo'], 0, 1);
-    $pdf->Cell(0, 10, utf8_decode('Descripción: ') . $cupon['descripcion'], 0, 1);
+
+    $pdf->SetFont('Arial', '', 10); // Ajusta el tamaño de fuente para el párrafo grande
+    $pdf->MultiCell(0, 10, utf8_decode ('Descripción: ') . $cupon['descripcion'], 0);
+
+    $pdf->SetFont('Arial', '', 14);
     $precioRegular = number_format($cupon['precio_regular'], 2);
     $pdf->Cell(0, 10, utf8_decode ('Precio Regular: $') . $precioRegular, 0, 1);
 
@@ -134,12 +139,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compra de Cupones</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="/style.css" rel="stylesheet">
+    <title>Historial de Compras</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #daa8a8;
+            background-color: light;
+        }
+    </style>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: light;
         }
 
         h1 {
@@ -207,9 +224,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand">LA CUPONERA SV</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+        <a class="nav-link" href="index_cliente.php">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="historial_compras.php">Historial</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="logout.php">Cerrar Sesión</a>
+        </li>
+      </ul>
+      <span class="navbar-text">
+        <?php echo $cliente['user']; ?>
+      </span>
+    </div>
+  </div>
+</nav>
 <h1>Compra de Cupones</h1>
 <p>Para comprar un cupón, por favor siga los siguientes pasos:</p>
-<form action="" method="POST">
+<form id="formularioCompra" action="" method="POST">
     <ol>
         <li>
             Cupón seleccionado:
@@ -270,5 +311,7 @@ fechaVencimientoInput.addEventListener('input', function (event) {
   fechaVencimientoInput.value = fechaVencimiento;
 });
 </script>
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>

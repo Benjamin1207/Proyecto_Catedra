@@ -44,10 +44,10 @@ $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
     </header>
 </div>
 <main class="container">
-    <div class="row">
+    <div class="row gy-3">
         <?php foreach ($resultado as $row) { ?>
             <div class="col-md-6">
-                <div class="h-100 p-5 bg-light text-dark border border-3 border-dark">
+                <div class="h-100 p-5 bg-light text-dark border border-3 border-dark cupon">
                     <h2><?php echo $row['TITULO']; ?></h2>
                     <p><?php echo $row['NOMBRE_EMPRESA']; ?></p>
                     <p><?php echo $row['DESCRIPCION']; ?></p>
@@ -59,6 +59,7 @@ $resultado = $sql->fetchAll(PDO::FETCH_ASSOC);
             </div>
         <?php } ?>
     </div>
+    <p></p>
 </main>
 
 <!-- Bootstrap -->
