@@ -46,7 +46,7 @@ $resultado = $sqlCupones->fetchAll(PDO::FETCH_ASSOC);
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">LA CUPONERA SV</a>
+    <a class="navbar-brand">LA CUPONERA SV</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -56,10 +56,7 @@ $resultado = $sqlCupones->fetchAll(PDO::FETCH_ASSOC);
           <a class="nav-link active" aria-current="page" href="#">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Cupones comprados</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Facturas</a>
+          <a class="nav-link" href="historial_compras.php">Historial</a>
         </li>
         <li class="nav-item">
         <a class="nav-link" href="logout.php">Cerrar Sesión</a>
@@ -73,7 +70,7 @@ $resultado = $sqlCupones->fetchAll(PDO::FETCH_ASSOC);
 </nav>
 <p></p>
 <main class="container">
-    <div class="row">
+    <div class="row gy-3">
         <?php foreach ($resultado as $row) { ?>
             <div class="col-md-6">
                 <div class="h-100 p-5 bg-light text-dark border border-3 border-dark">

@@ -19,3 +19,14 @@ if (file_exists('factura.pdf')) {
     echo "El archivo de factura no se encuentra disponible para descargar.";
 }
 ?>
+<?php
+// Obtener el estado del pago desde la URL
+$estadoPago = isset($_GET['estado_pago']) ? $_GET['estado_pago'] : '';
+
+// Verificar el estado del pago y mostrar la alerta correspondiente
+if ($estadoPago === 'success') {
+    echo '<script>alert("Pago realizado correctamente.");</script>';
+} elseif ($estadoPago === 'error') {
+    echo '<script>alert("El pago no se ha completado.");</script>';
+}
+?>

@@ -139,8 +139,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             background-color: #3e8e41;
         }
     </style>
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="/style.css" rel="stylesheet">
+    <title>La Cuponera SV</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: light;
+        }
+    </style>
 </head>
 <body>
+<div class="container">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <a href="index.php" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            <span class="fs-4" style="color: black"> LA CUPONERA SV</span>
+        </a>  
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0"></ul>
+
+        <div class="col-md-3 text-end">
+            <a href="login.php" style="text-decoration:none">
+                <button type="button" class="btn btn-dark me-2">Login</button>
+            </a>
+            <a href="registro_cliente.html" style="text-decoration:none">
+                <button type="button" class="btn btn-secondary">Sign-up</button>
+            </a>
+        </div>
+    </header>
+</div>
     <?php if(isset($error)){ ?>
         <p><?php echo $error; ?></p>
     <?php } ?>
@@ -153,6 +180,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <input type="submit" value="Iniciar Sesión">
     </form>
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>
 
