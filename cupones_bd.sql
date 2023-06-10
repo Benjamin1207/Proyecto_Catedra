@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 09-06-2023 a las 04:39:38
+-- Tiempo de generación: 10-06-2023 a las 06:11:42
 -- Versión del servidor: 8.0.31
 -- Versión de PHP: 8.0.26
 
@@ -86,11 +86,22 @@ CREATE TABLE IF NOT EXISTS `compra` (
   `id_empresa` int NOT NULL,
   `cantidad` int NOT NULL,
   `total` float NOT NULL,
+  `fecha_compra` date NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_cupon` (`id_cupon`),
   KEY `FK_cliente` (`id_cliente`),
   KEY `FK_empresa` (`id_empresa`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `compra`
+--
+
+INSERT INTO `compra` (`id`, `cod_compra`, `id_cupon`, `id_cliente`, `id_empresa`, `cantidad`, `total`, `fecha_compra`) VALUES
+(25, '6484100077', 1, 2, 1, 1, 200, '2023-06-10'),
+(26, '6484106a0c', 1, 2, 1, 1, 200, '2023-06-10'),
+(27, '6484116af2', 1, 2, 1, 1, 200, '2023-06-10'),
+(28, '6484117c33', 1, 2, 1, 1, 200, '2023-06-10');
 
 -- --------------------------------------------------------
 
@@ -114,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `cupon` (
   PRIMARY KEY (`id`),
   KEY `FK_id_estado` (`id_estado`) USING BTREE,
   KEY `FK_empresa` (`id_empresa`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `cupon`
@@ -122,7 +133,8 @@ CREATE TABLE IF NOT EXISTS `cupon` (
 
 INSERT INTO `cupon` (`id`, `titulo`, `id_empresa`, `precio_regular`, `precio_oferta`, `fecha_inic`, `fecha_fin`, `fecha_canje`, `cantidad`, `descripcion`, `id_estado`) VALUES
 (1, 'Ejemplo de titulo', 1, 350, 200, '2023-06-10', '2023-07-31', '2023-08-07', 54, 'Ejemplo de descripcion', 1),
-(2, 'EJEMPLO DE TITULO 2', 1, 400, 200, '2023-06-10', '2023-06-22', '2023-09-23', 80, 'EJEMPLO DE DESCRIPCION DE OFERTA 2', 1);
+(2, 'EJEMPLO DE TITULO 2', 1, 400, 200, '2023-06-10', '2023-06-22', '2023-09-23', 80, 'EJEMPLO DE DESCRIPCION DE OFERTA 2', 1),
+(3, 'Lorem Ipsum', 2, 50.69, 39.99, '2023-06-04', '2023-12-09', '2024-01-10', 10, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sed pellentesque est. Donec ornare, metus id laoreet luctus, ante sem iaculis neque, in sollicitudin lorem nisi porta augue. Nam libero ex, efficitur vel fermentum ac, venenatis molestie elit. Aliquam nec nunc non augue rutrum sagittis. Nulla malesuada non massa nec fringilla. Maecenas leo elit, rhoncus vitae elementum quis, dictum vel libero. Nunc sodales, nisi ac consectetur tincidunt, arcu justo ornare dui, vit', 1);
 
 -- --------------------------------------------------------
 
@@ -143,14 +155,15 @@ CREATE TABLE IF NOT EXISTS `empresa` (
   `email` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_spanish_ci NOT NULL,
   `porcentaje_comis` float NOT NULL COMMENT 'campo de comision solo utilizada por admin',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `empresa`
 --
 
 INSERT INTO `empresa` (`id`, `user`, `password`, `nombre_empresa`, `direccion`, `NIT`, `NRC`, `telefono`, `email`, `porcentaje_comis`) VALUES
-(1, 'udb_virtual', 'udb123456', 'UDB EL SALVADOR', 'CIUDADELA DON BOSCO, SOYAPANGO', 12345678912345, 12125566, 55665522, 'udbvirtual@gmail.com', 0.02);
+(1, 'udb_virtual', 'udb123456', 'UDB EL SALVADOR', 'CIUDADELA DON BOSCO, SOYAPANGO', 12345678912345, 12125566, 55665522, 'udbvirtual@gmail.com', 0.02),
+(2, 'systemdbsv', 'sy1234', 'SystemDB, S.A. de C.V', 'Aenean ac tincidunt nisi, eget malesuada turpis. Aenean ac enim nec ex luctus porttitor ut pharetra purus', 123456789456, 123644, 22563369, 'systemdb_sv@gmail.com', 0.01);
 
 -- --------------------------------------------------------
 
