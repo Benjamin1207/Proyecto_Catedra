@@ -1,5 +1,7 @@
 <?php
 require 'config/database.php';
+require 'fpdf/fpdf.php';
+
 $db = new Database();
 $con = $db->conectar();
 
@@ -51,14 +53,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Obtener el mes y año actuales
     $mesActual = date('m');
-    $anioActual = date('Y'); // Obtener el año actual completo
+    $anioActual = date('Y');
 
     // Obtener el mes y año de la fecha de vencimiento ingresada
     $partesFecha = explode('/', $fechaVencimiento);
-    $mesVencimiento = $partesFecha[0];
-    $anioVencimiento = $partesFecha[1];
+    $mesVencimiento = intval($partesFecha[0]); // Convertir a número entero
+    $anioVencimiento = intval($partesFecha[1]); // Convertir a número entero
 
-    if ($anioVencimiento < $anioActual || ($anioVencimiento == $anioActual && $mesVencimiento < $mesActual)) {
+    // Obtener el primer día del mes y año de vencimiento
+    $primerDiaVencimiento = date('Y-m-d', mktime(0, 0, 0, $mesVencimiento, 1, $anioVencimiento));
+
+    // Obtener la fecha actual
+    $fechaActual = date('Y-m-d');
+
+    if ($fechaActual >= $primerDiaVencimiento) {
         echo "La tarjeta ha vencido.";
         exit();
     }
@@ -68,21 +76,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idEmpresa = $cupon['id_empresa'];
     $cantidad = 1; // Solo se permite comprar un cupón a la vez
     $total = $cupon['precio_oferta'];
+    $fechaCompra = date('d-m-Y'); // Obtener la fecha actual en el formato deseado
 
-    $sqlGuardarCompra = $con->prepare("INSERT INTO compra (cod_compra, id_cupon, id_cliente, id_empresa, cantidad, total) VALUES (:cod_compra, :id_cupon, :id_cliente, :id_empresa, :cantidad, :total)");
+    $sqlGuardarCompra = $con->prepare("INSERT INTO compra (cod_compra, id_cupon, id_cliente, id_empresa, cantidad, total, fecha_compra) VALUES (:cod_compra, :id_cupon, :id_cliente, :id_empresa, :cantidad, :total, :fecha_compra)");
     $sqlGuardarCompra->bindParam(':cod_compra', $codCompra);
     $sqlGuardarCompra->bindParam(':id_cupon', $cuponId);
     $sqlGuardarCompra->bindParam(':id_cliente', $idCliente);
     $sqlGuardarCompra->bindParam(':id_empresa', $idEmpresa);
     $sqlGuardarCompra->bindParam(':cantidad', $cantidad);
     $sqlGuardarCompra->bindParam(':total', $total);
+    $sqlGuardarCompra->bindParam(':fecha_compra', $fechaCompra);
     $sqlGuardarCompra->execute();
 
-    echo "Compra realizada exitosamente.";
+    // Generar el PDF de la factura
+    $pdf = new FPDF();
+    $pdf->AddPage();
+
+    $pdf->SetFont('Arial', 'B', 16);
+    $pdf->Cell(0, 10, utf8_decode('Factura de Compra'), 0, 1, 'C');
+    $pdf->Cell(0, 10, utf8_decode('Código de Compra: ') . $codCompra, 0, 1);
+    $pdf->SetFont('Arial', '', 12);
+    $pdf->Cell(0, 10, utf8_decode('Fecha de Compra: ') . $fechaCompra, 0, 1);
+    $pdf->SetFont('Arial', 'B', 16);
+    $pdf->Cell(0, 10, utf8_decode('Datos del Cliente:'), 0, 1);
+
+    $pdf->SetFont('Arial', '', 12);
+    $pdf->Cell(0, 10, utf8_decode('Nombre: ') . $cliente['nombre_completo'], 0, 1);
+    $pdf->Cell(0, 10, utf8_decode('Dirección: ') . $cliente['direccion'], 0, 1);
+    $pdf->Cell(0, 10, utf8_decode('Usuario: ') . $cliente['user'], 0, 1);
+
+    $pdf->SetFont('Arial', 'B', 16);
+    $pdf->Cell(0, 10, utf8_decode('Datos del Cupón:'), 0, 1);
+
+    $pdf->SetFont('Arial', '', 12);
+    $pdf->Cell(0, 10, utf8_decode('Título: ') . $cupon['titulo'], 0, 1);
+    $pdf->Cell(0, 10, utf8_decode('Descripción: ') . $cupon['descripcion'], 0, 1);
+    $precioRegular = number_format($cupon['precio_regular'], 2);
+    $pdf->Cell(0, 10, utf8_decode ('Precio Regular: $') . $precioRegular, 0, 1);
+
+    $precioOferta = number_format($cupon['precio_oferta'], 2);
+    $pdf->Cell(0, 10, utf8_decode ('Precio Promoción: $') . $precioOferta, 0, 1);
+
+    $pdf->Cell(0, 10, utf8_decode('Utilizar antes de: ') . utf8_decode(date('d-m-Y', strtotime($cupon['fecha_canje']))), 0, 1);
+;   
+
+    $pdf->SetFont('Arial', 'B', 16);
+    $precioOferta = number_format($cupon['precio_oferta'], 2);
+    $pdf->Cell(0, 10, utf8_decode ('TOTAL: $') . $precioOferta, 0, 1);
+
+    $pdf->Output('factura.pdf', 'F');
+
+    // Redirigir al usuario a la página de descarga del PDF
+    header('Location: descargar_factura.php');
     exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -195,5 +243,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <li>Recuerde que puede comprar un máximo de 5 cupones.</li>
     </ol>
 </form>
+<script>
+// Obtener el campo de fecha de vencimiento
+const fechaVencimientoInput = document.getElementById('fecha_vencimiento');
+
+// Agregar el evento 'input' para detectar cambios en el campo
+fechaVencimientoInput.addEventListener('input', function (event) {
+  // Obtener el valor ingresado en el campo
+  let fechaVencimiento = event.target.value;
+
+  // Eliminar cualquier carácter que no sea un número o "/"
+  fechaVencimiento = fechaVencimiento.replace(/[^0-9/]/g, '');
+
+  // Verificar si se ha ingresado el mes completo
+  if (fechaVencimiento.length >= 2) {
+    // Autocompletar con el símbolo "/" si no está presente
+    if (fechaVencimiento.charAt(2) !== '/') {
+      fechaVencimiento = fechaVencimiento.slice(0, 2) + '/' + fechaVencimiento.slice(2);
+    }
+  }
+
+  // Limitar la longitud del campo a 5 caracteres (MM/YY)
+  fechaVencimiento = fechaVencimiento.slice(0, 5);
+
+  // Actualizar el valor del campo
+  fechaVencimientoInput.value = fechaVencimiento;
+});
+</script>
 </body>
 </html>
